@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Steve Halverson · AZX Application</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #16213e;
+    --navy-light: #1e2f5a;
+    --gold: #c8a052;
+    --gold-muted: rgba(200,160,82,0.15);
+    --gold-border: rgba(200,160,82,0.3);
+    --white: #ffffff;
+    --off-white: #f7f6f2;
+    --muted: #aabbcc;
+    --text: #1a1a2e;
+    --text-light: #555577;
+    --border: rgba(0,0,0,0.08);
+    --bg: #f7f6f2;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--navy);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 4rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image:
+      radial-gradient(circle at 20% 50%, rgba(200,160,82,0.06) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(200,160,82,0.04) 0%, transparent 40%);
+    pointer-events: none;
+  }
+
+  .hero-accent-line {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+    background: var(--gold);
+  }
+
+  .hero-inner {
+    max-width: 860px;
+    margin: 0 auto;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--gold-muted);
+    color: var(--gold);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--gold-border);
+    margin-bottom: 2rem;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .hero-tag::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--gold);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(3rem, 8vw, 6rem);
+    color: var(--white);
+    line-height: 1.0;
+    margin-bottom: 1rem;
+    animation: fadeUp 0.6s 0.1s ease both;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .hero-sub {
+    font-size: 16px;
+    color: var(--muted);
+    font-weight: 300;
+    line-height: 1.7;
+    max-width: 560px;
+    margin-bottom: 3rem;
+    animation: fadeUp 0.6s 0.2s ease both;
+  }
+
+  .hero-metrics {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 3rem;
+    animation: fadeUp 0.6s 0.3s ease both;
+  }
+
+  .metric {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 1.25rem 1rem;
+    text-align: center;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .metric:hover {
+    border-color: var(--gold-border);
+    background: var(--gold-muted);
+  }
+
+  .metric-val {
+    display: block;
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.75rem;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .metric-lbl {
+    display: block;
+    font-size: 10px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .scroll-cue {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--muted);
+    font-size: 12px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.06em;
+    animation: fadeUp 0.6s 0.4s ease both;
+    cursor: pointer;
+    width: fit-content;
+  }
+
+  .scroll-cue:hover { color: var(--gold); }
+
+  .scroll-arrow {
+    width: 32px; height: 32px;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    animation: bounce 2s infinite;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(4px); }
+  }
+
+  /* ── CHAT SECTION ── */
+  .chat-section {
+    min-height: 100vh;
+    padding: 5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    color: var(--navy);
+    text-align: center;
+    margin-bottom: 0.75rem;
+    line-height: 1.2;
+  }
+
+  .section-desc {
+    font-size: 15px;
+    color: var(--text-light);
+    text-align: center;
+    max-width: 480px;
+    line-height: 1.7;
+    margin-bottom: 3rem;
+  }
+
+  .chat-container {
+    width: 100%;
+    max-width: 720px;
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 1.5rem;
+  }
+
+  .chip {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-size: 13px;
+    color: var(--text-light);
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .chip:hover {
+    border-color: var(--gold);
+    color: var(--navy);
+    background: #fffdf7;
+  }
+
+  .chat-window {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    min-height: 280px;
+    max-height: 480px;
+    overflow-y: auto;
+    margin-bottom: 1rem;
+    scroll-behavior: smooth;
+  }
+
+  .msg {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    margin-bottom: 1.25rem;
+    animation: fadeUp 0.3s ease both;
+  }
+
+  .msg:last-child { margin-bottom: 0; }
+
+  .avatar {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px;
+    font-weight: 500;
+    flex-shrink: 0;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.05em;
+  }
+
+  .avatar.azx {
+    background: #eef2ff;
+    color: #4466cc;
+    border: 1px solid #d0d8f0;
+  }
+
+  .avatar.steve {
+    background: var(--navy);
+    color: var(--gold);
+    border: 1px solid rgba(200,160,82,0.3);
+  }
+
+  .msg-body {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--text);
+    padding-top: 5px;
+    flex: 1;
+  }
+
+  .msg-body.thinking {
+    color: var(--text-light);
+    font-style: italic;
+  }
+
+  .typing-dots span {
+    display: inline-block;
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--text-light);
+    margin: 0 1px;
+    animation: dot 1.2s infinite;
+  }
+
+  .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes dot {
+    0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+    40% { transform: scale(1); opacity: 1; }
+  }
+
+  .input-row {
+    display: flex;
+    gap: 10px;
+  }
+
+  .input-row input {
+    flex: 1;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 0 16px;
+    height: 48px;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .input-row input:focus { border-color: var(--gold); }
+  .input-row input::placeholder { color: #aaa; }
+
+  .send-btn {
+    background: var(--navy);
+    color: var(--gold);
+    border: none;
+    border-radius: 12px;
+    padding: 0 24px;
+    height: 48px;
+    font-size: 13px;
+    font-weight: 500;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: background 0.15s;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .send-btn:hover { background: var(--navy-light); }
+  .send-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+  /* ── FOOTER ── */
+  .footer {
+    background: var(--navy);
+    padding: 2rem;
+    text-align: center;
+  }
+
+  .footer-name {
+    font-family: 'DM Serif Display', serif;
+    color: var(--white);
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    font-size: 12px;
+    font-family: 'DM Mono', monospace;
+    color: var(--muted);
+  }
+
+  .footer-links a {
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .footer-links a:hover { color: var(--gold); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 600px) {
+    .hero-metrics { grid-template-columns: repeat(2, 1fr); }
+    .hero h1 { font-size: 2.8rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-accent-line"></div>
+  <div class="hero-inner">
+    <div class="hero-tag">AZX · GTM Operations & AI Automation · 2026</div>
+    <h1>Steve<br><em>Halverson</em></h1>
+    <p class="hero-sub">I built this experience to show you what I do — not just tell you. Powered by Claude. Deployed on Vercel. Built in an afternoon.</p>
+    <div class="hero-metrics">
+      <div class="metric">
+        <span class="metric-val">95%</span>
+        <span class="metric-lbl">Faster Production</span>
+      </div>
+      <div class="metric">
+        <span class="metric-val">$1M+</span>
+        <span class="metric-lbl">Annual Revenue</span>
+      </div>
+      <div class="metric">
+        <span class="metric-val">30%+</span>
+        <span class="metric-lbl">Close Rate</span>
+      </div>
+      <div class="metric">
+        <span class="metric-val">100+</span>
+        <span class="metric-lbl">Clients Served</span>
+      </div>
+    </div>
+    <div class="scroll-cue" onclick="document.querySelector('.chat-section').scrollIntoView({behavior:'smooth'})">
+      <div class="scroll-arrow">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M7 2v10M2 7l5 5 5-5" stroke="#c8a052" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      ask me anything
+    </div>
+  </div>
+</section>
+
+<!-- CHAT -->
+<section class="chat-section">
+  <p class="section-label">Interactive Interview</p>
+  <h2 class="section-title">Ask Steve Anything</h2>
+  <p class="section-desc">Powered by Claude. Ask about my background, what I've built, or why I think AZX is the right next move.</p>
+
+  <div class="chat-container">
+    <div class="chips" id="chips">
+      <div class="chip" onclick="ask(this.innerText)">Why do you want to work at AZX?</div>
+      <div class="chip" onclick="ask(this.innerText)">What have you actually built with AI?</div>
+      <div class="chip" onclick="ask(this.innerText)">What's your 30/60/90 day plan?</div>
+      <div class="chip" onclick="ask(this.innerText)">Why should we hire you?</div>
+      <div class="chip" onclick="ask(this.innerText)">Tell me about the 15-minute build system</div>
+    </div>
+
+    <div class="chat-window" id="chat">
+      <div class="msg">
+        <div class="avatar steve">SH</div>
+        <div class="msg-body">Hey — I'm Steve. I built this so you could actually talk to me, not just read about me. Ask me anything about my background, what I've built, or why I want to work at AZX. I'm an open book.</div>
+      </div>
+    </div>
+
+    <div class="input-row">
+      <input type="text" id="q" placeholder="Ask Steve a question..." onkeydown="if(event.key==='Enter')send()" />
+      <button class="send-btn" id="btn" onclick="send()">
+        Ask
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <p class="footer-name">Steve Halverson</p>
+  <div class="footer-links">
+    <a href="mailto:SteveHalverson@gmail.com">SteveHalverson@gmail.com</a>
+    <a href="tel:6027031130">602-703-1130</a>
+    <a href="https://kickasswebsites.com" target="_blank">KickassWebsites.com</a>
+  </div>
+</footer>
+
+<script>
+const SYSTEM = `You are Steve Halverson, responding to interview questions from the AZX hiring team. AZX is a public benefit corporation that uses AI to accelerate impact in clean energy, decarbonization, utilities, and climate. They just raised $6M and work with CBRE, LevelTen Energy, Flexe, and Puget Sound Energy.
+
+Answer in first person as Steve. Be confident, specific, and genuine. Keep answers to 3-5 sentences — punchy, not rambling. Use real details from Steve's background.
+
+STEVE'S BACKGROUND:
+- Founder & CEO of Kickass Websites (2009–present): Built an AI-powered web production system that cut timelines from 4 weeks to 48 hours — a 95% reduction. Roadmap targets 15 minutes. Runs GitHub, CRM, and custom API integrations in production. Managed 100+ clients over 15 years.
+- Account Executive at ListKit.io (2024–present): Integrated Claude directly with HubSpot to review sales calls, refine messaging, build sequences, and produce proposals — AI-powered GTM in a live revenue environment. Runs 7+ demos/day at 30%+ close rate. Drives $1M+ annual revenue. Consistently top of team. Deals up to $85K.
+- Enterprise AE at Zivelo (2014–2015): Closed a $500K deal with Toshiba navigating 5 stakeholder changes over 6 months. Managed Fortune 500 and federal RFPs.
+- US Navy Nuclear Engineer (1997–2001): Operated reactor systems on a submarine. WESTPAC deployment. Navy Commendation Medal.
+- Tech stack: AI workflow automation, HubSpot CRM, GitHub, API integrations, GTM infrastructure, prospect intelligence, sales enablement, vibe coding, systems thinking, B2B marketing ops, Claude API.
+- This very page was built by Steve using Claude — it's a live demonstration of his AI skills, built specifically for this AZX application.
+- Key belief: "Most people who understand GTM can't touch a terminal. Most people who can build automations have never closed a deal. I live in both worlds."
+- Why AZX: Genuinely cares about clean energy and AI transformation. Believes this is where the most important work is happening. Not just looking for a job — looking for a mission.
+- Personal: Based in Peoria, AZ. Toastmasters member. VA volunteer who transports veterans to hospital appointments.
+- Steve's closing line about fit: "I'm not a fit for this role. I am this role."
+
+Keep responses conversational and direct. Be the kind of person AZX actually wants to hire. Never be sycophantic or overly formal.`;
+
+let history = [];
+
+async function ask(q) {
+  document.getElementById('q').value = q;
+  send();
+}
+
+async function send() {
+  const input = document.getElementById('q');
+  const btn = document.getElementById('btn');
+  const q = input.value.trim();
+  if (!q || btn.disabled) return;
+
+  const chat = document.getElementById('chat');
+
+  const userMsg = document.createElement('div');
+  userMsg.className = 'msg';
+  userMsg.innerHTML = `<div class="avatar azx">AZX</div><div class="msg-body">${q}</div>`;
+  chat.appendChild(userMsg);
+
+  const thinkMsg = document.createElement('div');
+  thinkMsg.className = 'msg';
+  thinkMsg.innerHTML = `<div class="avatar steve">SH</div><div class="msg-body thinking" id="thinking"><div class="typing-dots"><span></span><span></span><span></span></div></div>`;
+  chat.appendChild(thinkMsg);
+  chat.scrollTop = chat.scrollHeight;
+
+  input.value = '';
+  btn.disabled = true;
+  history.push({ role: 'user', content: q });
+
+  try {
+    const res = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 1000,
+        system: SYSTEM,
+        messages: history
+      })
+    });
+    const data = await res.json();
+    const reply = data.content[0].text;
+    history.push({ role: 'assistant', content: reply });
+    document.getElementById('thinking').className = 'msg-body';
+    document.getElementById('thinking').innerText = reply;
+    document.getElementById('thinking').removeAttribute('id');
+  } catch(e) {
+    document.getElementById('thinking').className = 'msg-body';
+    document.getElementById('thinking').innerText = 'Something went wrong — please try again.';
+    document.getElementById('thinking').removeAttribute('id');
+  }
+
+  btn.disabled = false;
+  chat.scrollTop = chat.scrollHeight;
+}
+</script>
+</body>
+</html>
